@@ -100,9 +100,13 @@ async def registration(username: str, email: str, password: str):
 #Endpoint that deletes a user from the Users table
 @app.delete("/delete_user")
 def delete_user(username: str):
-     # Get current user
-     
-     # Delete user
-     cur.execute(f"DELETE FROM Users WHERE username = '{username}';")
-     conn.commit()
-     return {"accountStatus": "user has been deleted"}
+    cur.execute(f"SELECT username FROM Users")
+    rows = cur.fetchall()
+    if(username in rows):
+        # Delete user based on username input
+        cur.execute(f"DELETE FROM Users WHERE username = '{username}';")
+        conn.commit()
+        return {"accountDeletion":"Success"}
+    return {"accountDeletion": "Failed"}
+
+
